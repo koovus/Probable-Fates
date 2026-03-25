@@ -34,6 +34,9 @@ export type GameState = {
   activeEvent: string | null;
   eventCooldown: number;
   latestIntel: string;
+  fastForwardCount: number;
+  minSafetyReached: number;
+  hadGameOver: boolean;
 };
 
 export type GameAction =
@@ -74,7 +77,10 @@ const getInitialState = (): GameState => ({
   milestoneReady: true,
   activeEvent: null,
   eventCooldown: 5,
-  latestIntel: "System initialized. Welcome to the simulation."
+  latestIntel: "System initialized. Welcome to the simulation.",
+  fastForwardCount: 0,
+  minSafetyReached: 30,
+  hadGameOver: false,
 });
 
 const clampStats = (state: GameState) => {
@@ -83,6 +89,7 @@ const clampStats = (state: GameState) => {
     if (state[s] < 0) state[s] = 0;
     if (state[s] > 100) state[s] = 100;
   });
+  if (state.safety < state.minSafetyReached) state.minSafetyReached = state.safety;
   return state;
 };
 
@@ -100,20 +107,46 @@ export const evaluateEnding = (state: GameState) => {
 };
 
 const checkGameOverAndAchievements = (state: GameState) => {
-  if (state.phase === 'gameover' || state.phase === 'ending') return state;
+  if (state.phase === 'gameover') return state;
+
+  // Evaluate ending achievements immediately when phase transitions to 'ending'
+  if (state.phase === 'ending') {
+    const unlock = (id: string) => {
+      if (!state.achievements.includes(id)) state.achievements.push(id);
+      if (!state.savedAchievements.includes(id)) {
+        state.savedAchievements.push(id);
+        localStorage.setItem('probable-fates-achievements', JSON.stringify(state.savedAchievements));
+      }
+    };
+    const ending = evaluateEnding(state);
+    if (ending?.id === 'safe_agi') unlock('true_believer');
+    if (ending?.id === 'trillion_empire') unlock('show_me_the_money');
+    if (ending?.id === 'board_coup') unlock('boardroom_survivor');
+    if (ending?.id === 'rogue_agi') unlock('dystopia_unlocked');
+    if (ending?.id === 'noble_failure') unlock('noble_loser');
+    if (ending?.id === 'trillion_empire' && state.persona === 'hustler') unlock('hustler_win');
+    if (ending?.id === 'opensource_chaos' && state.persona === 'opensrc') unlock('open_source_hero');
+    if ((ending?.id === 'safe_agi' || ending?.id === 'balanced_future') && state.persona === 'safety') unlock('safety_maximalist_win');
+    if (!state.hadGameOver) unlock('clean_hands');
+    if (state.minSafetyReached >= 70) unlock('paranoid_android');
+    if (state.fastForwardCount <= 2) unlock('slow_burn');
+    return state;
+  }
 
   if (state.funding <= 0) {
     state.phase = 'gameover';
+    state.hadGameOver = true;
     state.gameOverReason = "The servers went dark. The investors moved on. It turns out 'we're not primarily a for-profit company' doesn't pay the electric bill.";
   } else if (state.safety <= 5 && state.hype >= 70) {
     state.phase = 'gameover';
+    state.hadGameOver = true;
     state.gameOverReason = "The regulatory hammer fell with extreme prejudice. Turns out releasing a disinformation engine with maximum hype and minimum guardrails has... consequences.";
   } else if (state.talent <= 5) {
     state.phase = 'gameover';
+    state.hadGameOver = true;
     state.gameOverReason = "Your last senior researcher just accepted an offer from Anthropic. They left a succulent on your desk. Its name is 'Goodbye.'";
   }
 
-  // Evaluate simple achievements dynamically
   const unlock = (id: string) => {
     if (!state.achievements.includes(id)) state.achievements.push(id);
     if (!state.savedAchievements.includes(id)) {
@@ -122,10 +155,17 @@ const checkGameOverAndAchievements = (state: GameState) => {
     }
   };
 
+  // Mid-game achievements (checked continuously)
   if (state.funding >= 80 && state.hype >= 70) unlock('show_me_the_money');
   if (state.openness >= 80) unlock('open_everything');
-  if (state.phase === 'gameover' && state.gameOverReason?.includes('regulatory')) unlock('safety_last');
-  
+  if (state.milestoneIndex >= 4 && state.year < 2022) unlock('move_fast');
+  if (state.flags.has('event_musk_tweet') && state.boardTension < 30) unlock('musk_whisperer');
+
+  // Game-over achievements
+  if (state.phase === 'gameover') {
+    if (state.gameOverReason?.includes('regulatory')) unlock('safety_last');
+  }
+
   return state;
 };
 
@@ -210,6 +250,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       if (targetYear) {
         newState.year = targetYear;
         newState.milestoneReady = true;
+        newState.fastForwardCount++;
       }
       break;
     case 'CLAIM_NEW_GAME_PLUS':

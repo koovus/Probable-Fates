@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 export function TerminalButton({ 
-  onClick, children, className, disabled, variant = 'primary' 
+  onClick, children, className, disabled, variant = 'primary', title
 }: { 
-  onClick?: () => void, children: React.ReactNode, className?: string, disabled?: boolean, variant?: 'primary'|'secondary'|'danger'|'ghost' 
+  onClick?: () => void, children: React.ReactNode, className?: string, disabled?: boolean, variant?: 'primary'|'secondary'|'danger'|'ghost', title?: string
 }) {
   const base = "relative px-4 py-2 font-mono uppercase tracking-wider font-bold transition-all active:scale-95 group";
   const variants = {
@@ -19,6 +19,7 @@ export function TerminalButton({
     <button 
       onClick={onClick} 
       disabled={disabled}
+      title={title}
       className={cn(base, variants[variant], disabled && "opacity-50 cursor-not-allowed", className)}
     >
       <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2">&gt;</span>

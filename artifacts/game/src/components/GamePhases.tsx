@@ -43,7 +43,7 @@ export function TitlePhase() {
 export function PersonaPhase() {
   const { dispatch } = useGame();
   
-  const personas = [
+  const personas: { id: 'safety' | 'hustler' | 'opensrc'; icon: string; title: string; bonus: string; desc: string }[] = [
     { id: 'safety', icon: '🧠', title: 'Safety Maximalist', bonus: 'Safety +15, Hype -5', desc: "You genuinely believe AGI could end civilization. Not in a fun way. You read every alignment paper and lose sleep nightly. Your investors think you're paranoid. You think they're reckless. You're both right." },
     { id: 'hustler', icon: '🚀', title: 'Hustler CEO', bonus: 'Funding +15, Hype +10, Safety -10', desc: "Move fast, break things, launch first, apologize later. You have a 5-year plan, a 10-year plan, and absolutely no work-life balance. CNBC once called you 'visionary.' Your safety team calls you 'a liability.'" },
     { id: 'opensrc', icon: '🌐', title: 'Open-Source Idealist', bonus: 'Openness +20, Talent +10, Funding -10', desc: "Information wants to be free. Weights want to be free. Your mortgage payment also wants to be free, but that's a problem for future you. You believe in democratizing AI even if it democratizes catastrophe." }
@@ -54,7 +54,7 @@ export function PersonaPhase() {
       <h2 className="text-4xl text-primary mb-12 font-display uppercase tracking-widest text-center">Select Founder Persona</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full">
         {personas.map(p => (
-          <div key={p.id} className="border border-primary/50 p-6 bg-card hover:bg-primary/5 hover:border-primary transition-all cursor-pointer group flex flex-col h-full" onClick={() => dispatch({ type: 'SET_PERSONA', payload: p.id as any })}>
+          <div key={p.id} className="border border-primary/50 p-6 bg-card hover:bg-primary/5 hover:border-primary transition-all cursor-pointer group flex flex-col h-full" onClick={() => dispatch({ type: 'SET_PERSONA', payload: p.id })}>
             <div className="text-6xl mb-4 grayscale group-hover:grayscale-0 transition-all">{p.icon}</div>
             <h3 className="text-2xl font-bold text-primary mb-2 uppercase">{p.title}</h3>
             <div className="text-xs text-accent font-mono bg-accent/10 p-2 mb-4">BONUS: {p.bonus}</div>
@@ -71,11 +71,12 @@ export function PersonaPhase() {
 
 export function PlayingPhase() {
   const { state, dispatch } = useGame();
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
 
   const handleSave = () => {
     localStorage.setItem('probable-fates-save', serializeState(state));
-    dispatch({ type: 'IDLE_TICK', payload: { fundRoll: 0, computeRoll: 0, talentRoll: 0, eventRoll: 0 }}); // dummy tick to force re-render, though not strictly needed
-    alert("Simulation saved to local storage.");
+    setSaveStatus('saved');
+    setTimeout(() => setSaveStatus('idle'), 2000);
   };
 
   return (
@@ -91,7 +92,9 @@ export function PlayingPhase() {
         </div>
         <div className="flex gap-2">
           <TerminalButton variant="ghost" onClick={() => dispatch({ type: 'FAST_FORWARD'})} title="Skip to next milestone">⏩ FW</TerminalButton>
-          <TerminalButton variant="ghost" onClick={handleSave}>💾 SAVE</TerminalButton>
+          <TerminalButton variant="ghost" onClick={handleSave}>
+            {saveStatus === 'saved' ? '✅ SAVED' : '💾 SAVE'}
+          </TerminalButton>
         </div>
       </div>
 
