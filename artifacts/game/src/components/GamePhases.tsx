@@ -249,14 +249,15 @@ export function EventModal() {
 
   if (!event) return null;
 
+  const theme = event.theme ?? 'standard';
+
   const handleChoice = (c: Choice) => {
     setOutcome(c.outcome);
+    const delay = theme === 'standard' ? 2500 : 17500;
     setTimeout(() => {
       dispatch({ type: 'RESOLVE_EVENT', payload: { choice: c } });
-    }, 2500);
+    }, delay);
   };
-
-  const theme = event.theme ?? 'standard';
 
   const styles = {
     gossip: {
