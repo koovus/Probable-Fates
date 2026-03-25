@@ -21,7 +21,8 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 ```text
 artifacts-monorepo/
 ├── artifacts/              # Deployable applications
-│   └── api-server/         # Express API server
+│   ├── api-server/         # Express API server
+│   └── game/               # OpenAI Simulator: Probable Fates (React + Vite, client-side game)
 ├── lib/                    # Shared libraries
 │   ├── api-spec/           # OpenAPI spec + Orval codegen config
 │   ├── api-client-react/   # Generated React Query hooks
@@ -90,6 +91,21 @@ Generated Zod schemas from the OpenAPI spec (e.g. `HealthCheckResponse`). Used b
 ### `lib/api-client-react` (`@workspace/api-client-react`)
 
 Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHealthCheck`, `healthCheck`).
+
+### `artifacts/game` (`@workspace/game`)
+
+**OpenAI Simulator: Probable Fates** — v1.0. A fully client-side hybrid idle-clicker + narrative text-adventure game.
+
+- Built with React + Vite, served at previewPath `/`
+- No backend API calls — all state in React `useReducer` + Context
+- Persistence via `localStorage` (`probable-fates-save`, `probable-fates-achievements`)
+- Dependencies: `framer-motion`, `lucide-react`, `recharts`, `clsx`, `tailwind-merge`
+- Key files:
+  - `src/lib/content.ts` — All game content: milestones, events, endings, achievements
+  - `src/lib/engine.tsx` — Game state (reducer, context, save/load)
+  - `src/components/GamePhases.tsx` — All screen components (title, persona, playing, milestone, event, ending)
+  - `src/components/AchievementsModal.tsx` — Achievements panel
+  - `src/pages/GameRoot.tsx` — Top-level component with idle tick & phase routing
 
 ### `scripts` (`@workspace/scripts`)
 

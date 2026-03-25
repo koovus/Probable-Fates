@@ -1,0 +1,16 @@
+packages:
+  "framer-motion": "Smooth UI transitions and animations for the terminal aesthetic"
+  "lucide-react": "Icons for the game UI"
+  "recharts": "Radar chart for the ending telemetry screen"
+  "clsx": "Class merging for UI components"
+  "tailwind-merge": "Class merging for UI components"
+
+images:
+  - path: "artifacts/game/public/images/hero-bg.png"
+    description: "Dark retro silicon valley terminal aesthetic, glowing green ASCII art style AI brain, glowing CRT monitor scanlines, hacker minimal, dark background #0a0a0f"
+    aspect_ratio: "16:9"
+
+notes:
+  - All game state is strictly client-side using React Context and useReducer.
+  - Persistence is handled via browser localStorage (keys: 'probable-fates-save', 'probable-fates-achievements').
+  - The game does not require backend API calls.
