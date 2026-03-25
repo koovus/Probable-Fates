@@ -4,6 +4,7 @@ import { useGame, serializeState, deserializeState, evaluateEnding } from '@/lib
 import { TerminalButton, ResourceCard, StatBadge } from './TerminalUI';
 import { MILESTONES, EVENTS, Choice, StatKey } from '@/lib/content';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { startMusic } from '@/lib/music';
 
 export function TitlePhase() {
   const { dispatch } = useGame();
@@ -35,8 +36,8 @@ export function TitlePhase() {
         </p>
         
         <div className="flex flex-col gap-3 max-w-xs mx-auto">
-          <TerminalButton onClick={() => dispatch({ type: 'SET_PHASE', payload: 'persona' })}>New Game</TerminalButton>
-          {hasSave && <TerminalButton onClick={load} variant="secondary">Continue Save</TerminalButton>}
+          <TerminalButton onClick={() => { startMusic(); dispatch({ type: 'SET_PHASE', payload: 'persona' }); }}>New Game</TerminalButton>
+          {hasSave && <TerminalButton onClick={() => { startMusic(); load(); }} variant="secondary">Continue Save</TerminalButton>}
         </div>
         
         <p className="mt-8 text-xs text-primary/40 font-mono">

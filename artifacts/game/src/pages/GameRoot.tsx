@@ -12,14 +12,16 @@ import {
 } from '@/components/GamePhases';
 import { AchievementsModal } from '@/components/AchievementsModal';
 import { TerminalButton } from '@/components/TerminalUI';
+import { setMusicBuildLevel, toggleMute, isMuted } from '@/lib/music';
 
 export function GameRoot() {
   const { state, dispatch } = useGame();
   const [achievementsOpen, setAchievementsOpen] = useState(false);
+  const [musicMuted, setMusicMuted] = useState(false);
 
+  // Idle tick every 4 seconds while playing
   useEffect(() => {
     if (state.phase !== 'playing') return;
-    
     const interval = setInterval(() => {
       dispatch({ 
         type: 'IDLE_TICK', 
@@ -31,12 +33,27 @@ export function GameRoot() {
         }
       });
     }, 4000);
-    
     return () => clearInterval(interval);
   }, [state.phase, dispatch]);
 
+  // Music build level: advance a layer every 2 milestones cleared
+  useEffect(() => {
+    if (state.phase === 'playing' || state.phase === 'milestone') {
+      const level = Math.min(4, Math.floor(state.milestoneIndex / 2) + 1);
+      setMusicBuildLevel(level);
+    }
+    if (state.phase === 'ending') {
+      setMusicBuildLevel(4);
+    }
+  }, [state.phase, state.milestoneIndex]);
+
+  const handleMuteToggle = () => {
+    const nowMuted = toggleMute();
+    setMusicMuted(nowMuted);
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground font-mono relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground font-mono relative">
       <AnimatePresence mode="wait">
         {state.phase === 'title' && <TitlePhase key="title" />}
         {state.phase === 'persona' && <PersonaPhase key="persona" />}
@@ -52,14 +69,25 @@ export function GameRoot() {
 
       <AchievementsModal isOpen={achievementsOpen} onClose={() => setAchievementsOpen(false)} />
 
-      {/* Global persistent controls */}
-      {(state.phase === 'title' || state.phase === 'playing') && (
-        <div className="fixed top-4 right-4 z-[90]">
+      {/* Persistent top-right controls */}
+      <div className="fixed top-3 right-3 z-[90] flex gap-2 items-center">
+        {/* Music toggle — only shown once game has started */}
+        {state.phase !== 'title' && (
+          <TerminalButton
+            variant="ghost"
+            onClick={handleMuteToggle}
+            title={musicMuted ? 'Unmute music' : 'Mute music'}
+            className="text-xs px-2 py-1"
+          >
+            {musicMuted ? '🔇' : '🎵'}
+          </TerminalButton>
+        )}
+        {(state.phase === 'title' || state.phase === 'playing') && (
           <TerminalButton variant="ghost" onClick={() => setAchievementsOpen(true)}>
             🏆 ACHIEVEMENTS
           </TerminalButton>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
