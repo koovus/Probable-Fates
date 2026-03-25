@@ -256,24 +256,60 @@ export function EventModal() {
     }, 2500);
   };
 
+  const theme = event.theme ?? 'standard';
+
+  const styles = {
+    gossip: {
+      border: 'border-emerald-400',
+      heading: 'text-emerald-400',
+      body: 'text-emerald-300/80',
+      btn: 'border-emerald-400/40 hover:bg-emerald-400/10 text-emerald-400',
+      glow: 'shadow-[0_0_16px_rgba(52,211,153,0.25)]',
+      tag: '📡 GOSSIP INTEL',
+      tagColor: 'text-emerald-400/60',
+      outcome: 'text-emerald-400',
+    },
+    paranoia: {
+      border: 'border-red-400',
+      heading: 'text-red-400',
+      body: 'text-red-300/80',
+      btn: 'border-red-400/40 hover:bg-red-400/10 text-red-400',
+      glow: 'shadow-[0_0_16px_rgba(248,113,113,0.25)]',
+      tag: '⚠️ THREAT ASSESSMENT',
+      tagColor: 'text-red-400/60',
+      outcome: 'text-red-400',
+    },
+    standard: {
+      border: 'border-accent',
+      heading: 'text-accent',
+      body: 'text-foreground/80',
+      btn: 'border-accent/40 hover:bg-accent/10 text-accent',
+      glow: 'terminal-glow-amber',
+      tag: '📋 INCIDENT REPORT',
+      tagColor: 'text-accent/60',
+      outcome: 'text-accent',
+    },
+  }[theme];
+
   return (
     <motion.div 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-[150] bg-background/90 flex items-center justify-center p-4 backdrop-blur-sm"
     >
-      <div className="bg-card border-2 border-accent p-5 max-w-lg w-full terminal-glow-amber">
-        <h2 className="text-xl sm:text-2xl font-bold mb-3 text-accent glitch-text">{event.headline}</h2>
+      <div className={`bg-card border-2 ${styles.border} p-5 max-w-lg w-full ${styles.glow}`}>
+        <div className={`text-[10px] font-mono uppercase tracking-widest mb-2 ${styles.tagColor}`}>{styles.tag}</div>
+        <h2 className={`text-xl sm:text-2xl font-bold mb-3 ${styles.heading} glitch-text`}>{event.headline}</h2>
         
         {!outcome ? (
           <>
-            <p className="mb-5 text-foreground/80 font-mono text-sm leading-relaxed">{event.body}</p>
+            <p className={`mb-5 font-mono text-sm leading-relaxed ${styles.body}`}>{event.body}</p>
             <div className="flex flex-col gap-2">
               {event.choices.map((c, i) => (
                 <button 
                   key={i} onClick={() => handleChoice(c)}
-                  className="text-left border border-accent/40 p-3 hover:bg-accent/10 transition-colors group"
+                  className={`text-left border p-3 transition-colors group ${styles.btn}`}
                 >
-                  <div className="text-accent font-bold text-sm group-hover:translate-x-1 transition-transform">{c.label}</div>
+                  <div className="font-bold text-sm group-hover:translate-x-1 transition-transform">{c.label}</div>
                   <div className="text-xs opacity-60 mt-1 font-mono">
                     {Object.entries(c.deltas).map(([k,v]) => `${Number(v)>0?'+':''}${v} ${k}`).join(' · ')}
                   </div>
@@ -282,7 +318,7 @@ export function EventModal() {
             </div>
           </>
         ) : (
-          <div className="py-8 text-center text-accent font-mono text-sm">
+          <div className={`py-8 text-center font-mono text-sm ${styles.outcome}`}>
             <p>{outcome}</p>
           </div>
         )}

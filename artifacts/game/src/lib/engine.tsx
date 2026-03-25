@@ -208,13 +208,22 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       }
 
       if (!newState.milestoneReady && newState.eventCooldown <= 0) {
-        if (action.payload.eventRoll < 0.15) {
-           const availEvents = EVENTS.filter((e) => !newState.flags.has(`event_${e.id}`));
-           if (availEvents.length > 0) {
-               const ev = availEvents[Math.floor(action.payload.eventRoll * 100) % availEvents.length];
-               newState.activeEvent = ev.id;
-               newState.flags.add(`event_${ev.id}`);
-               newState.eventCooldown = 4;
+        if (action.payload.eventRoll < 0.25) {
+           let pool = EVENTS.filter((e) =>
+             !newState.flags.has(`event_${e.id}`) &&
+             (!e.persona || e.persona.includes(newState.persona as 'safety' | 'hustler' | 'opensrc'))
+           );
+           // If pool is exhausted, reset and allow repeats (excluding active event)
+           if (pool.length === 0) {
+             EVENTS.forEach(e => newState.flags.delete(`event_${e.id}`));
+             pool = EVENTS.filter(e => !e.persona || e.persona.includes(newState.persona as 'safety' | 'hustler' | 'opensrc'));
+           }
+           if (pool.length > 0) {
+             const idx = Math.floor(action.payload.eventRoll * pool.length);
+             const ev = pool[Math.min(idx, pool.length - 1)];
+             newState.activeEvent = ev.id;
+             newState.flags.add(`event_${ev.id}`);
+             newState.eventCooldown = 3;
            }
         }
       } else {
