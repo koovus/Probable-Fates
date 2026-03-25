@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "ZRVM3x2T7R-d07TSwzFWs"
+uri = "file://artifacts/game/README.md"
+type = "text"
+title = "README.md — OpenAI Simulator: Probable Fates"
