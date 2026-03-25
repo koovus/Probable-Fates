@@ -12,7 +12,12 @@ export function TitlePhase() {
   const load = () => {
     const data = localStorage.getItem('probable-fates-save');
     if (data) {
-      dispatch({ type: 'LOAD_GAME', payload: deserializeState(data) });
+      const loaded = deserializeState(data);
+      if (loaded) {
+        dispatch({ type: 'LOAD_GAME', payload: loaded });
+      } else {
+        localStorage.removeItem('probable-fates-save');
+      }
     }
   };
 

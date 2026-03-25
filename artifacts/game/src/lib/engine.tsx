@@ -284,7 +284,14 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const saved = localStorage.getItem('probable-fates-achievements');
     if (saved) {
-      dispatch({ type: 'LOAD_ACHIEVEMENTS', payload: JSON.parse(saved) });
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          dispatch({ type: 'LOAD_ACHIEVEMENTS', payload: parsed });
+        }
+      } catch {
+        localStorage.removeItem('probable-fates-achievements');
+      }
     }
   }, []);
 
@@ -299,8 +306,16 @@ export const serializeState = (state: GameState): string => {
   return JSON.stringify({ ...state, flags: Array.from(state.flags) });
 }
 
-export const deserializeState = (data: string): GameState => {
-  const parsed = JSON.parse(data);
-  parsed.flags = new Set(parsed.flags || []);
-  return parsed;
+export const deserializeState = (data: string): GameState | null => {
+  try {
+    const parsed = JSON.parse(data);
+    if (!parsed || typeof parsed !== 'object' || !parsed.phase) return null;
+    parsed.flags = new Set(Array.isArray(parsed.flags) ? parsed.flags : []);
+    parsed.fastForwardCount = parsed.fastForwardCount ?? 0;
+    parsed.minSafetyReached = parsed.minSafetyReached ?? parsed.safety ?? 30;
+    parsed.hadGameOver = parsed.hadGameOver ?? false;
+    return parsed as GameState;
+  } catch {
+    return null;
+  }
 }
