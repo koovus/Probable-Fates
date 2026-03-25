@@ -79,7 +79,7 @@ const getInitialState = (): GameState => ({
   eventCooldown: 5,
   latestIntel: "System initialized. Welcome to the simulation.",
   fastForwardCount: 0,
-  minSafetyReached: 30,
+  minSafetyReached: Infinity,
   hadGameOver: false,
 });
 
@@ -89,7 +89,7 @@ const clampStats = (state: GameState) => {
     if (state[s] < 0) state[s] = 0;
     if (state[s] > 100) state[s] = 100;
   });
-  if (state.safety < state.minSafetyReached) state.minSafetyReached = state.safety;
+  if (state.milestoneIndex > 0 && state.safety < state.minSafetyReached) state.minSafetyReached = state.safety;
   return state;
 };
 
@@ -303,7 +303,12 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 export const serializeState = (state: GameState): string => {
-  return JSON.stringify({ ...state, flags: Array.from(state.flags) });
+  const obj = {
+    ...state,
+    flags: Array.from(state.flags),
+    minSafetyReached: isFinite(state.minSafetyReached) ? state.minSafetyReached : null,
+  };
+  return JSON.stringify(obj);
 }
 
 export const deserializeState = (data: string): GameState | null => {
@@ -312,7 +317,7 @@ export const deserializeState = (data: string): GameState | null => {
     if (!parsed || typeof parsed !== 'object' || !parsed.phase) return null;
     parsed.flags = new Set(Array.isArray(parsed.flags) ? parsed.flags : []);
     parsed.fastForwardCount = parsed.fastForwardCount ?? 0;
-    parsed.minSafetyReached = parsed.minSafetyReached ?? parsed.safety ?? 30;
+    parsed.minSafetyReached = (parsed.minSafetyReached != null && isFinite(parsed.minSafetyReached)) ? parsed.minSafetyReached : Infinity;
     parsed.hadGameOver = parsed.hadGameOver ?? false;
     return parsed as GameState;
   } catch {
