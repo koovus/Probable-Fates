@@ -19,8 +19,8 @@ export function TitlePhase() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
       <div 
-        className="absolute inset-0 z-0 opacity-20 bg-cover bg-center" 
-        style={{ backgroundImage: `url(${import.meta.env.BASE_URL}images/hero-bg.png)` }} 
+        className="absolute inset-0 z-0 opacity-10"
+        style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,0,0.03) 2px, rgba(0,255,0,0.03) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,255,0,0.02) 2px, rgba(0,255,0,0.02) 4px)' }}
       />
       <div className="z-10 text-center max-w-3xl border-2 border-primary bg-black/60 p-12 backdrop-blur-sm terminal-glow">
         <h1 className="text-5xl md:text-7xl font-display text-primary glitch-text mb-4">OpenAI Simulator</h1>
