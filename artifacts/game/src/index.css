@@ -10,57 +10,44 @@
   --font-display: 'VT323', monospace;
   --font-sans: 'JetBrains Mono', monospace;
 
-  /* Dark Hacker Terminal Theme */
-  --color-background: 240 10% 4%;     /* #09090b */
-  --color-foreground: 120 100% 50%;   /* #00ff00 */
-  --color-border: 120 100% 50%;
-  --color-input: 120 100% 50%;
-  --color-ring: 120 100% 50%;
+  /* Dark Navy + Cyan Terminal — readable, easy on the eyes */
+  --color-background: #0d1b2a;
+  --color-foreground: #c8d8e8;
+  --color-border: #1bb8d4;
+  --color-input: #1bb8d4;
+  --color-ring: #1bb8d4;
 
-  --color-card: 240 10% 6%;
-  --color-card-foreground: 120 100% 50%;
-  --color-card-border: 120 100% 50%;
+  --color-card: #112233;
+  --color-card-foreground: #c8d8e8;
 
-  --color-popover: 240 10% 4%;
-  --color-popover-foreground: 120 100% 50%;
-  --color-popover-border: 120 100% 50%;
+  --color-popover: #0d1b2a;
+  --color-popover-foreground: #c8d8e8;
 
-  --color-primary: 120 100% 50%;
-  --color-primary-foreground: 240 10% 4%;
-  
-  --color-secondary: 45 100% 50%;     /* Amber */
-  --color-secondary-foreground: 240 10% 4%;
+  --color-primary: #29c4e0;
+  --color-primary-foreground: #0d1b2a;
 
-  --color-muted: 240 10% 12%;
-  --color-muted-foreground: 120 100% 30%;
+  --color-secondary: #f5a623;
+  --color-secondary-foreground: #0d1b2a;
 
-  --color-accent: 45 100% 50%;
-  --color-accent-foreground: 240 10% 4%;
+  --color-muted: #1a2d40;
+  --color-muted-foreground: #7a9ab5;
 
-  --color-destructive: 0 100% 50%;
-  --color-destructive-foreground: 240 10% 4%;
-}
+  --color-accent: #f5a623;
+  --color-accent-foreground: #0d1b2a;
 
-:root {
-  --background: 240 10% 4%;
-  --foreground: 120 100% 50%;
-  --primary: 120 100% 50%;
-  --primary-foreground: 240 10% 4%;
-  --card: 240 10% 6%;
-  --card-foreground: 120 100% 50%;
-  --border: 120 100% 50%;
-  --muted: 240 10% 12%;
-  --muted-foreground: 120 100% 30%;
-  --accent: 45 100% 50%;
-  --accent-foreground: 240 10% 4%;
-  --destructive: 0 100% 50%;
-  --destructive-foreground: 240 10% 4%;
-  --radius: 0;
+  --color-destructive: #e05c5c;
+  --color-destructive-foreground: #fdf0f0;
+
+  --radius: 0rem;
 }
 
 @layer base {
   * {
     @apply border-border;
+  }
+  html, body, #root {
+    background-color: #0d1b2a;
+    color: #c8d8e8;
   }
   body {
     @apply font-mono antialiased bg-background text-foreground;
@@ -78,14 +65,11 @@
     content: " ";
     display: block;
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    top: 0; left: 0; bottom: 0; right: 0;
     background: linear-gradient(
       to bottom,
       rgba(255,255,255,0) 50%,
-      rgba(0,0,0,0.15) 50%
+      rgba(0,0,0,0.07) 50%
     );
     background-size: 100% 4px;
     z-index: 50;
@@ -93,33 +77,27 @@
   }
 
   .glitch-text {
-    text-shadow: 2px 0 0 rgba(0, 255, 0, 0.5), -2px 0 0 rgba(255, 0, 0, 0.5);
-    animation: glitch 2s infinite;
+    text-shadow: 2px 0 0 rgba(41, 196, 224, 0.3), -2px 0 0 rgba(224, 92, 92, 0.3);
+    animation: glitch 3s infinite;
   }
 
   .terminal-glow {
-    box-shadow: 0 0 10px var(--color-primary), inset 0 0 10px rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 8px rgba(41, 196, 224, 0.2), inset 0 0 6px rgba(41, 196, 224, 0.04);
   }
 
   .terminal-glow-amber {
-    box-shadow: 0 0 10px var(--color-accent), inset 0 0 10px rgba(255, 191, 0, 0.1);
+    box-shadow: 0 0 8px rgba(245, 166, 35, 0.2), inset 0 0 6px rgba(245, 166, 35, 0.04);
   }
 }
 
 @keyframes glitch {
-  0% { text-shadow: 2px 0 0 rgba(0, 255, 0, 0.5), -2px 0 0 rgba(255, 0, 0, 0.5); }
-  5% { text-shadow: -2px 0 0 rgba(0, 255, 0, 0.5), 2px 0 0 rgba(255, 0, 0, 0.5); }
-  10% { text-shadow: 2px 0 0 rgba(0, 255, 0, 0.5), -2px 0 0 rgba(255, 0, 0, 0.5); }
-  100% { text-shadow: 2px 0 0 rgba(0, 255, 0, 0.5), -2px 0 0 rgba(255, 0, 0, 0.5); }
+  0%   { text-shadow: 2px 0 0 rgba(41, 196, 224, 0.3), -2px 0 0 rgba(224, 92, 92, 0.3); }
+  5%   { text-shadow: -2px 0 0 rgba(41, 196, 224, 0.3), 2px 0 0 rgba(224, 92, 92, 0.3); }
+  10%  { text-shadow: 2px 0 0 rgba(41, 196, 224, 0.3), -2px 0 0 rgba(224, 92, 92, 0.3); }
+  100% { text-shadow: 2px 0 0 rgba(41, 196, 224, 0.3), -2px 0 0 rgba(224, 92, 92, 0.3); }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-background);
-  border-left: 1px solid var(--color-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0d1b2a; }
+::-webkit-scrollbar-thumb { background: rgba(41, 196, 224, 0.35); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(41, 196, 224, 0.6); }
