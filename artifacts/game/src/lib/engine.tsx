@@ -44,7 +44,7 @@ export type GameAction =
   | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'SET_PERSONA'; payload: 'safety' | 'hustler' | 'opensrc' }
   | { type: 'CLICK_RESOURCE'; resource: StatKey; amount: number }
-  | { type: 'IDLE_TICK'; payload: { fundRoll: number; computeRoll: number; talentRoll: number; eventRoll: number } }
+  | { type: 'IDLE_TICK'; payload: { fundRoll: number; computeRoll: number; talentRoll: number; eventRoll: number; eventIndexRoll: number } }
   | { type: 'START_MILESTONE' }
   | { type: 'RESOLVE_MILESTONE'; payload: { choice: Choice } }
   | { type: 'RESOLVE_EVENT'; payload: { choice: Choice } }
@@ -219,7 +219,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
              pool = EVENTS.filter(e => !e.persona || e.persona.includes(newState.persona as 'safety' | 'hustler' | 'opensrc'));
            }
            if (pool.length > 0) {
-             const idx = Math.floor(action.payload.eventRoll * pool.length);
+             const idx = Math.floor(action.payload.eventIndexRoll * pool.length);
              const ev = pool[Math.min(idx, pool.length - 1)];
              newState.activeEvent = ev.id;
              newState.flags.add(`event_${ev.id}`);

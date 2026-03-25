@@ -29,7 +29,8 @@ export function GameRoot() {
           fundRoll: Math.random(), 
           computeRoll: Math.random(), 
           talentRoll: Math.random(), 
-          eventRoll: Math.random() 
+          eventRoll: Math.random(),
+          eventIndexRoll: Math.random() 
         }
       });
     }, 4000);
