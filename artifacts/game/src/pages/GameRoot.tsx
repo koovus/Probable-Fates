@@ -73,14 +73,14 @@ export function GameRoot() {
       <div className="fixed top-3 right-3 z-[90] flex gap-2 items-center">
         {/* Music toggle — only shown once game has started */}
         {state.phase !== 'title' && (
-          <TerminalButton
-            variant="ghost"
+          <button
             onClick={handleMuteToggle}
             title={musicMuted ? 'Unmute music' : 'Mute music'}
-            className="text-xs px-2 py-1"
+            className="flex items-center gap-1.5 px-3 py-1.5 border-2 border-primary bg-card text-primary font-mono text-xs uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all terminal-glow"
           >
-            {musicMuted ? '🔇' : '🎵'}
-          </TerminalButton>
+            <span className="text-base leading-none">{musicMuted ? '🔇' : '🎵'}</span>
+            <span>{musicMuted ? 'MUTED' : 'MUSIC'}</span>
+          </button>
         )}
         {(state.phase === 'title' || state.phase === 'playing') && (
           <TerminalButton variant="ghost" onClick={() => setAchievementsOpen(true)}>
