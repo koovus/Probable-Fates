@@ -121,7 +121,31 @@ export const MILESTONES: Milestone[] = [
     ]
   },
   {
-    year: 2026,
+    year: 2026.08,
+    title: "The $110 Billion Round",
+    narrative: "February 2026. The term sheet is real. $110 billion. One of the largest private capital raises in the history of private capital.\n\nAmazon: $50 billion. SoftBank: $30 billion. NVIDIA is in. The post-money valuation is $840 billion. Your legal team needed a lie-down after reading the wire transfer amounts.\n\nYou are now, on paper, one of the most valuable companies on Earth. The question is no longer whether you have the resources. It's what you do with them — and whether the mission survives contact with this much money.",
+    choices: [
+      { label: "All-In Compute — Build the AGI Infrastructure", deltas: { compute: 40, hype: 25, safety: -15, missionDrift: 20 }, flags: ['compute_blitz'], outcome: "You commission data centers on four continents. The electricity draw makes national news. NVIDIA sends three fruit baskets. The training runs begin." },
+      { label: "Global Safety Infrastructure — Hire 500 Researchers", deltas: { safety: 35, talent: 25, funding: -20, hype: 10 }, flags: ['safety_expansion'], outcome: "The largest safety research expansion in AI history. Papers pour out. Other labs copy the programs. You feel, briefly, like you're winning." },
+      { label: "Employee Ownership — Share the Wealth", deltas: { talent: 30, boardTension: -10, funding: -15, hype: 15 }, flags: ['employee_equity'], outcome: "Everyone with more than 18 months tenure becomes a paper millionaire. Retention hits 97%. The cafeteria gets very good." },
+      { label: "Regulatory War Chest — Preemptive Compliance Fund", deltas: { safety: 15, funding: -10, boardTension: -15, openness: 10 }, flags: ['compliance_fund'], outcome: "You build the legal and lobbying infrastructure to engage every regulator on Earth simultaneously. The Brussels office alone is twelve floors." },
+      { label: "Strategic Pause — Figure Out What $110B Actually Means", deltas: { safety: 20, missionDrift: -15, hype: -10 }, flags: ['funding_pause'], outcome: "You slow down. Think. Convene an all-hands. The mission statement gets rewritten for the first time in four years. It is better." }
+    ]
+  },
+  {
+    year: 2026.25,
+    title: "Sora Goes Dark",
+    narrative: "Late March 2026. You've made the call: Sora is shutting down. All of it. The video generation, the image synthesis, the API access — everything goes dark at 11:59pm Pacific.\n\nThe internet is confused. Your product team is in shock. Competitors are circling. The press is already writing the post-mortem.\n\nThe question everyone is asking — including your board — is: why? And more importantly: what does this mean for everything else you're building?",
+    choices: [
+      { label: "Safety First — The Deepfakes Were Uncontrollable", deltas: { safety: 30, hype: -15, openness: 15, missionDrift: -20 }, flags: ['sora_safety_shutdown'], outcome: "You publish the internal safety review. The numbers are stark. The press respects the honesty more than it expected to. Anthropic sends a congratulatory email that stings a little." },
+      { label: "Strategic Pivot — GPT-5 Gets All the Compute", deltas: { compute: 25, hype: 20, talent: 10, missionDrift: 10 }, flags: ['sora_compute_pivot'], outcome: "Freed-up GPU capacity immediately accelerates GPT-5 training. The announcement frames it as focus, not retreat. Analysts believe you. Mostly." },
+      { label: "Regulatory Preemption — Give Something Up Voluntarily", deltas: { safety: 20, boardTension: -20, rivalPressure: -15, hype: 5 }, flags: ['sora_regulatory_sacrifice'], outcome: "You call the EU commissioner before the shutdown goes public. The goodwill is significant. Washington follows the EU's lead for once." },
+      { label: "Quiet the Mission — No Public Explanation", deltas: { missionDrift: 20, boardTension: 15, hype: -20, safety: 10 }, flags: ['sora_silent_shutdown'], outcome: "No statement. No blog post. Just dark. The speculation fills the void completely. Some of it is correct. None of it is provable." },
+      { label: "Monetization Failure — Admit the Economics Didn't Work", deltas: { openness: 20, hype: -10, boardTension: 10, funding: 10 }, flags: ['sora_economics_shutdown'], outcome: "The transparency is genuinely rare in tech. Investors respect the honesty. Competitors quietly breathe easier. The blog post is forwarded around every AI startup's Slack." }
+    ]
+  },
+  {
+    year: 2026.5,
     title: "Final Reckoning",
     narrative: "The dust settles. The algorithms run. The world has changed. Whether for better or worse depends on a thousand choices — including yours.\n\nThis is your final act. Choose how you want the story to end.",
     choices: [
