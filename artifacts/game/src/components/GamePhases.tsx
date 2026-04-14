@@ -94,83 +94,158 @@ export function PlayingPhase() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-3 sm:p-4 pb-6">
-      {/* Header */}
-      <div className="flex justify-between items-center border-b-2 border-primary/60 pb-3 mb-4">
-        <div className="flex items-center gap-3">
-          <div className="text-2xl sm:text-4xl font-display text-primary tracking-widest">
-            YEAR {state.year.toFixed(1)}
+    <div className="w-full max-w-6xl mx-auto flex flex-col pb-4" style={{ minHeight: '100vh' }}>
+      <style>{`
+        @keyframes year-glow {
+          0%, 100% { text-shadow: 0 0 10px rgba(41,196,224,0.5), 0 0 30px rgba(41,196,224,0.2); }
+          50% { text-shadow: 0 0 22px rgba(41,196,224,0.95), 0 0 60px rgba(41,196,224,0.5); }
+        }
+        .year-pulse { animation: year-glow 3s ease-in-out infinite; }
+      `}</style>
+
+      {/* THREE-COLUMN CORE */}
+      <div className="flex flex-1 border border-primary/20 mt-3 sm:mt-4">
+
+        {/* LEFT COLUMN — Funding + Compute */}
+        <div className="flex flex-col border-r border-primary/20" style={{ width: '25%' }}>
+          <div className="px-3 py-2 text-[10px] uppercase tracking-widest text-primary/40 border-b border-primary/15 font-mono">
+            Resources
           </div>
-          <div className="hidden sm:block text-[10px] font-mono text-primary/40">
-            TICK: ACTIVE | CD: {state.eventCooldown > 0 ? state.eventCooldown : 'READY'}
+          <div className="flex flex-col gap-3 p-3 flex-1">
+            <ResourceCard
+              name="Funding" icon="💰" value={state.funding} clickLabel="Raise Capital"
+              onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'funding', amount: Math.floor(Math.random() * 3) + 3 })}
+            />
+            <ResourceCard
+              name="Compute" icon="🖥️" value={state.compute} clickLabel="Buy GPUs"
+              onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'compute', amount: Math.floor(Math.random() * 3) + 2 })}
+            />
           </div>
         </div>
-        <div className="flex gap-2">
-          <TerminalButton variant="ghost" onClick={() => dispatch({ type: 'FAST_FORWARD' })} title="Skip to next milestone">⏩ FW</TerminalButton>
-          <TerminalButton variant="ghost" onClick={handleSave}>
-            {saveStatus === 'saved' ? '✅ SAVED' : '💾 SAVE'}
-          </TerminalButton>
-        </div>
-      </div>
 
-      {/* Milestone ready banner — inline, not a full-screen overlay */}
-      {state.milestoneReady && (
-        <motion.button
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          onClick={() => dispatch({ type: 'START_MILESTONE' })}
-          className="w-full mb-4 py-3 bg-primary/15 border-2 border-primary text-primary font-display text-lg sm:text-xl tracking-widest uppercase hover:bg-primary hover:text-primary-foreground transition-all terminal-glow animate-pulse"
-        >
-          ⚠ INCOMING TRANSMISSION — MILESTONE {Math.floor(state.year)} ⚠
-        </motion.button>
-      )}
+        {/* CENTER COLUMN — Year as hub */}
+        <div className="flex flex-col items-center flex-1 min-w-0">
 
-      {/* Secondary stats row */}
-      <div className="flex flex-wrap gap-3 mb-4 p-3 border border-primary/20 bg-card/50">
-        <StatBadge label="Hype" value={state.hype} />
-        <StatBadge label="Openness" value={state.openness} />
-        <div className="flex gap-3 ml-auto text-[10px] opacity-50 font-mono items-center uppercase flex-wrap">
-          <span>Drift {Math.floor(state.missionDrift)}</span>
-          <span>Board {Math.floor(state.boardTension)}</span>
-          <span>MS {Math.floor(state.msInfluence)}</span>
-          <span>Rival {Math.floor(state.rivalPressure)}</span>
-        </div>
-      </div>
+          {/* Year hero */}
+          <div className="flex flex-col items-center justify-center px-4 pt-6 pb-4 w-full border-b border-primary/20">
+            <div className="text-[10px] uppercase tracking-widest text-primary/50 font-mono mb-3">
+              ● Simulation Active
+            </div>
+            <div
+              className="font-display year-pulse text-center leading-none text-primary"
+              style={{ fontSize: 'clamp(3.5rem, 8vw, 5.5rem)', letterSpacing: '0.06em' }}
+            >
+              {state.year.toFixed(1)}
+            </div>
+            <div className="font-display text-center mt-1 tracking-widest text-primary/40 text-base">
+              YEAR
+            </div>
 
-      {/* Resource cards + log — 2-col on sm+ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        {/* Resources */}
-        <div className="space-y-3">
-          <h2 className="text-sm font-bold text-primary/60 uppercase tracking-widest">Resources</h2>
-          <ResourceCard name="Funding" icon="💰" value={state.funding} clickLabel="Raise Capital" onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'funding', amount: Math.floor(Math.random()*3)+3 })} />
-          <ResourceCard name="Compute" icon="🖥️" value={state.compute} clickLabel="Buy GPUs" onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'compute', amount: Math.floor(Math.random()*3)+2 })} />
-          <ResourceCard name="Talent" icon="🧑‍💻" value={state.talent} clickLabel="Recruit" onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'talent', amount: Math.floor(Math.random()*3)+1 })} />
-          <ResourceCard name="Safety" icon="🛡️" value={state.safety} clickLabel="Align Models" onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'safety', amount: Math.floor(Math.random()*2)+2 })} />
-        </div>
+            {/* Action buttons */}
+            <div className="flex gap-3 mt-5">
+              <TerminalButton variant="ghost" onClick={() => dispatch({ type: 'FAST_FORWARD' })} title="Skip to next milestone">
+                ⏩ FW
+              </TerminalButton>
+              <TerminalButton variant="ghost" onClick={handleSave}>
+                {saveStatus === 'saved' ? '✅ SAVED' : '💾 SAVE'}
+              </TerminalButton>
+            </div>
+          </div>
 
-        {/* Decision log */}
-        <div className="flex flex-col">
-          <h2 className="text-sm font-bold text-primary/60 uppercase tracking-widest mb-3">Decision Log</h2>
-          <div className="border border-primary/20 p-3 bg-card/50 overflow-y-auto" style={{ maxHeight: '320px' }}>
-            <div className="space-y-3 font-mono text-xs">
-              {state.choiceHistory.slice().reverse().map((h, i) => (
-                <div key={i} className="border-l-2 border-primary/30 pl-3">
-                  <div className="text-primary/50">[{h.year}] {h.label}</div>
-                  <div className="text-foreground/70 mt-0.5 leading-snug">{h.desc}</div>
+          {/* Milestone banner */}
+          {state.milestoneReady && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => dispatch({ type: 'START_MILESTONE' })}
+              className="w-full py-2 bg-accent/15 border-b-2 border-accent text-accent font-display text-base sm:text-lg tracking-widest uppercase hover:bg-accent hover:text-accent-foreground transition-all terminal-glow-amber animate-pulse"
+            >
+              ⚠ INCOMING TRANSMISSION — MILESTONE {Math.floor(state.year)} ⚠
+            </motion.button>
+          )}
+
+          {/* Vital readings */}
+          <div className="w-full px-4 py-4 flex flex-col gap-3">
+            <div className="text-[10px] uppercase tracking-widest text-primary/40 font-mono">Vital Readings</div>
+
+            {/* Hype + Openness */}
+            <div className="flex gap-3">
+              <div className="flex-1"><StatBadge label="Hype" value={state.hype} /></div>
+              <div className="flex-1"><StatBadge label="Openness" value={state.openness} /></div>
+            </div>
+
+            {/* Dim stats 2-col */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0 text-xs font-mono mt-1">
+              {([
+                ['Mission Drift', state.missionDrift],
+                ['Board Tension', state.boardTension],
+                ['MS Leverage',   state.msInfluence],
+                ['Rival Threat',  state.rivalPressure],
+              ] as [string, number][]).map(([label, val]) => (
+                <div key={label} className="flex justify-between items-center py-1 border-b border-primary/10">
+                  <span className="text-primary/40 truncate pr-1">{label}</span>
+                  <span className="text-primary/60 shrink-0">{Math.floor(val)}%</span>
                 </div>
               ))}
-              {state.choiceHistory.length === 0 && (
-                <div className="text-muted-foreground italic">No decisions recorded yet.</div>
-              )}
             </div>
           </div>
         </div>
+
+        {/* RIGHT COLUMN — Talent + Safety */}
+        <div className="flex flex-col border-l border-primary/20" style={{ width: '25%' }}>
+          <div className="px-3 py-2 text-[10px] uppercase tracking-widest text-primary/40 border-b border-primary/15 font-mono">
+            Resources
+          </div>
+          <div className="flex flex-col gap-3 p-3 flex-1">
+            <ResourceCard
+              name="Talent" icon="🧑‍💻" value={state.talent} clickLabel="Recruit"
+              onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'talent', amount: Math.floor(Math.random() * 3) + 1 })}
+            />
+            <ResourceCard
+              name="Safety" icon="🛡️" value={state.safety} clickLabel="Align Models"
+              onClick={() => dispatch({ type: 'CLICK_RESOURCE', resource: 'safety', amount: Math.floor(Math.random() * 2) + 2 })}
+            />
+          </div>
+        </div>
+
       </div>
 
-      {/* Status bar */}
-      <div className="border border-primary/20 p-2 sm:p-3 bg-card/50 flex items-center gap-2 font-mono text-xs">
-        <span className="text-primary animate-pulse shrink-0">root@openai:~#</span>
-        <span className="text-foreground/60 truncate">{state.latestIntel}</span>
+      {/* DECISION LOG */}
+      <div className="border-x border-b border-primary/20 flex flex-col" style={{ height: '200px' }}>
+        <div className="px-4 py-2 text-[10px] uppercase tracking-widest text-primary/40 border-b border-primary/15 flex justify-between items-center shrink-0 font-mono">
+          <span>Decision Log</span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full animate-pulse bg-primary" />
+            Live
+          </span>
+        </div>
+        <div className="overflow-y-auto flex-1 px-4 py-3 space-y-3 font-mono text-xs">
+          {state.choiceHistory.length === 0 ? (
+            <div className="text-primary/30 italic">No decisions recorded yet.</div>
+          ) : (
+            state.choiceHistory.slice().reverse().map((h, i) => (
+              <div key={i} className="flex gap-3 items-start">
+                <span className="font-display text-lg text-accent shrink-0">[{h.year}]</span>
+                <div>
+                  <div className="font-bold text-foreground/80">{h.label}</div>
+                  <div className="text-foreground/50 mt-0.5 leading-snug">{h.desc}</div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* TERMINAL STATUS BAR */}
+      <div className="border-x border-b border-primary/20 px-4 py-2 flex justify-between items-center text-xs font-mono bg-black/40">
+        <span className="truncate">
+          <span className="text-accent">root@openai:~#</span>
+          <span className="text-primary/60 ml-2">{state.latestIntel}</span>
+          <span className="text-primary animate-pulse">_</span>
+        </span>
+        <span className="text-primary/30 hidden sm:inline shrink-0 ml-3">
+          TICK: ACTIVE | CD: {state.eventCooldown > 0 ? state.eventCooldown : 'READY'}
+        </span>
       </div>
     </div>
   );
