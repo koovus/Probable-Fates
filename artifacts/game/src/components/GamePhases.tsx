@@ -328,7 +328,7 @@ export function EventModal() {
 
   const handleChoice = (c: Choice) => {
     setOutcome(c.outcome);
-    const delay = 13000;
+    const delay = 6000;
     setTimeout(() => {
       dispatch({ type: 'RESOLVE_EVENT', payload: { choice: c } });
     }, delay);
