@@ -41,7 +41,7 @@ export function TitlePhase() {
         </div>
         
         <p className="mt-8 text-xs text-primary/40 font-mono">
-          v1.0 | All choices are fictional. All consequences are very much real (in this timeline).
+          v1.0 | All choices are fictional. All consequences are very much real (in this timeline) -- MOAI OHIO @ 2026.
         </p>
       </div>
     </div>
