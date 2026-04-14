@@ -253,7 +253,7 @@ export function EventModal() {
 
   const handleChoice = (c: Choice) => {
     setOutcome(c.outcome);
-    const delay = theme === 'standard' ? 2500 : 17500;
+    const delay = 13000;
     setTimeout(() => {
       dispatch({ type: 'RESOLVE_EVENT', payload: { choice: c } });
     }, delay);
