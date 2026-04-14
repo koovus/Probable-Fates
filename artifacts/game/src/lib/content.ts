@@ -709,5 +709,26 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'hustler_win', title: 'Unicorn Energy', icon: '🚀', desc: 'Reach Trillion-Dollar Empire ending as Hustler CEO' },
   { id: 'open_source_hero', title: 'For the People', icon: '🔓', desc: 'Reach Open-Source Chaos ending as Open-Source Idealist' },
   { id: 'dystopia_unlocked', title: 'Bad End', icon: '☠️', desc: 'Trigger the Rogue AGI ending' },
-  { id: 'noble_loser', title: 'Noble Failure', icon: '🎓', desc: 'Trigger the Noble Failure ending' }
+  { id: 'noble_loser', title: 'Noble Failure', icon: '🎓', desc: 'Trigger the Noble Failure ending' },
+
+  { id: 'billionaire_brain', title: 'Billionaire Brain', icon: '💸', desc: 'Reach 90+ Funding at any point in a run' },
+  { id: 'compute_god', title: 'Compute God', icon: '⚙️', desc: 'Reach 90+ Compute at any point in a run' },
+  { id: 'talent_show', title: 'Talent Show', icon: '🌟', desc: 'Reach 90+ Talent at any point in a run' },
+  { id: 'mission_drifted', title: 'Mission: Drifted', icon: '🌊', desc: 'Let Mission Drift reach 80+ in a single run' },
+  { id: 'they_all_left', title: 'They All Left', icon: '🚪', desc: 'Trigger the Talent Drain game over' },
+  { id: 'technically_bankrupt', title: 'Technically Bankrupt', icon: '📉', desc: 'Trigger the Funding Collapse game over' },
+  { id: 'full_house', title: 'Full House', icon: '🃏', desc: 'Have Funding, Safety, Compute, AND Talent all above 60 at once' },
+  { id: 'alignment_tax', title: 'The Alignment Tax', icon: '⚖️', desc: 'Reach an ending with Safety 80+ but Funding under 40' },
+  { id: 'ghost_board', title: 'Ghost Board', icon: '👻', desc: 'Reach the ending with Board Tension under 20' },
+  { id: 'doomscroller', title: 'Doomscroller', icon: '📱', desc: 'See 10 or more random events in a single run' },
+  { id: 'galaxy_brain', title: 'Galaxy Brain', icon: '🌌', desc: 'Max out any single stat to 100' },
+  { id: 'double_down', title: 'Double Down', icon: '🎲', desc: 'Choose the AGI race option in BOTH the 2023 and 2024 milestones' },
+  { id: 'no_shortcuts', title: 'No Shortcuts', icon: '⏳', desc: 'Complete a full run without using Fast Forward once' },
+  { id: 'famous_last_words', title: 'Famous Last Words', icon: '🎤', desc: 'Trigger any game over while Hype is 90 or above' },
+  { id: 'new_game_plus_win', title: 'Second Wind', icon: '🔄', desc: 'Start a New Game+ run and reach any winning ending' },
+  { id: 'gossip_hound', title: 'Gossip Hound', icon: '📡', desc: 'See 5 or more Gossip Intel events in a single run' },
+  { id: 'threat_level_midnight', title: 'Threat Level Midnight', icon: '🚨', desc: 'See 5 or more Threat Assessment events in a single run' },
+  { id: 'balanced_future_win', title: 'Balanced on a Knife', icon: '⚔️', desc: 'Reach the Balanced Future ending' },
+  { id: 'corporate_sellout', title: 'Corporate Sellout', icon: '🏢', desc: 'Reach the Acquired ending' },
+  { id: 'triple_threat', title: 'Triple Threat', icon: '🏆', desc: 'Win with all three personas across any number of runs' }
 ];

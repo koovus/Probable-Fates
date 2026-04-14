@@ -130,6 +130,36 @@ const checkGameOverAndAchievements = (state: GameState) => {
     if (!state.hadGameOver) unlock('clean_hands');
     if (state.minSafetyReached >= 70) unlock('paranoid_android');
     if (state.fastForwardCount <= 2) unlock('slow_burn');
+
+    // New ending-based achievements
+    if (ending?.id === 'balanced_future') unlock('balanced_future_win');
+    if (ending?.id === 'acquired') unlock('corporate_sellout');
+
+    // Stat-based ending achievements
+    const winningEndings = ['safe_agi', 'trillion_empire', 'opensource_chaos', 'balanced_future'];
+    if (ending && winningEndings.includes(ending.id)) {
+      if (state.safety >= 80 && state.funding < 40) unlock('alignment_tax');
+      if (state.boardTension < 20) unlock('ghost_board');
+      if (state.fastForwardCount === 0) unlock('no_shortcuts');
+      if (state.newGamePlusBonus !== null) unlock('new_game_plus_win');
+      if (
+        state.savedAchievements.includes('safety_maximalist_win') &&
+        state.savedAchievements.includes('hustler_win') &&
+        state.savedAchievements.includes('open_source_hero')
+      ) unlock('triple_threat');
+    }
+
+    // Flag-based ending achievements
+    if (state.flags.has('agi_race_accelerate') && state.flags.has('agi_race_final')) unlock('double_down');
+
+    // Event-count achievements at end of run
+    const gossipIds = EVENTS.filter(e => e.theme === 'gossip').map(e => e.id);
+    const paranoiaIds = EVENTS.filter(e => e.theme === 'paranoia').map(e => e.id);
+    const gossipSeen = gossipIds.filter(id => state.flags.has(`event_${id}`)).length;
+    const paranoiaSeen = paranoiaIds.filter(id => state.flags.has(`event_${id}`)).length;
+    if (gossipSeen >= 5) unlock('gossip_hound');
+    if (paranoiaSeen >= 5) unlock('threat_level_midnight');
+
     return state;
   }
 
@@ -161,9 +191,25 @@ const checkGameOverAndAchievements = (state: GameState) => {
   if (state.milestoneIndex >= 4 && state.year < 2022) unlock('move_fast');
   if (state.flags.has('event_musk_tweet') && state.boardTension < 30) unlock('musk_whisperer');
 
+  // Stat-max achievements
+  if (state.funding >= 90) unlock('billionaire_brain');
+  if (state.compute >= 90) unlock('compute_god');
+  if (state.talent >= 90) unlock('talent_show');
+  if (state.missionDrift >= 80) unlock('mission_drifted');
+  if (state.funding >= 100 || state.compute >= 100 || state.talent >= 100 ||
+      state.safety >= 100 || state.hype >= 100 || state.openness >= 100) unlock('galaxy_brain');
+  if (state.funding > 60 && state.safety > 60 && state.compute > 60 && state.talent > 60) unlock('full_house');
+
+  // Event-count achievement (running total)
+  const totalEventsSeen = [...state.flags].filter(f => f.startsWith('event_')).length;
+  if (totalEventsSeen >= 10) unlock('doomscroller');
+
   // Game-over achievements
   if (state.phase === 'gameover') {
     if (state.gameOverReason?.includes('regulatory')) unlock('safety_last');
+    if (state.gameOverReason?.includes('succulent')) unlock('they_all_left');
+    if (state.gameOverReason?.includes('servers went dark')) unlock('technically_bankrupt');
+    if (state.hype >= 90) unlock('famous_last_words');
   }
 
   return state;
