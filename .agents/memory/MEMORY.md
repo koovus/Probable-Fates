@@ -1,0 +1,1 @@
+- [Dependency remediation](dependency-remediation.md) — nested pnpm audits share the workspace lockfile; review automatic fixes for cross-major upgrades.
